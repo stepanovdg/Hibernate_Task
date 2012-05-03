@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.epam.hibernatetask.model.EmployeelistEntity" table="EMPLOYEELIST" schema="USER7">
+        <cache usage="read-only"/>
+        <id name="id"/>
+        <property name="empName">
+            <column name="EMP_NAME" sql-type="varchar2" length="4000" not-null="true"/>
+        </property>
+        <property name="empLastName">
+            <column name="EMP_LAST_NAME" sql-type="varchar2" length="4000" not-null="true"/>
+        </property>
+        <property name="adrName">
+            <column name="ADR_NAME" sql-type="varchar2" length="4000" not-null="true"/>
+        </property>
+        <property name="compName">
+            <column name="COMP_NAME" sql-type="varchar2" length="4000" not-null="true"/>
+        </property>
+        <property name="cityName">
+            <column name="CITY_NAME" sql-type="varchar2" length="4000" not-null="true"/>
+        </property>
+        <property name="countryName">
+            <column name="COUNTRY_NAME" sql-type="varchar2" length="4000" not-null="true"/>
+        </property>
+        <property name="contain">
+            <column name="CONTAIN" sql-type="number" length="22"/>
+        </property>
+        <property name="pos">
+            <column name="POS" sql-type="varchar2" length="4000"/>
+        </property>
+    </class>
+    <query name="getEmployees">
+      <![CDATA[from  EmployeelistEntity  where rownum <= :MAX_ROW and rownum >= :MIN_ROW]]>
+    </query>
+</hibernate-mapping>

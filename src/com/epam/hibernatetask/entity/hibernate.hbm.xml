@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.epam.hibernatetask.entity.AdrEntity" table="ADR" schema="USER7">
+        <id name="adrId">
+            <column name="ADR_ID" sql-type="number" length="22" not-null="true"/>
+        </id>
+        <property name="adrName">
+            <column name="ADR_NAME" sql-type="varchar2" length="4000" not-null="true"/>
+        </property>
+        <many-to-one name="cityByCityFk" class="com.epam.hibernatetask.entity.CityEntity">
+            <column name="CITY_FK" not-null="true"/>
+        </many-to-one>
+        <set name="empsByAdrId" inverse="true">
+            <key>
+                <column name="ADR_FK" not-null="true"/>
+            </key>
+            <one-to-many not-found="ignore" class="com.epam.hibernatetask.entity.EmpEntity"/>
+        </set>
+        <set name="officesByAdrId" inverse="true">
+            <key>
+                <column name="ADR_ID" not-null="true"/>
+            </key>
+            <one-to-many not-found="ignore" class="com.epam.hibernatetask.entity.OfficeEntity"/>
+        </set>
+    </class>
+    <class name="com.epam.hibernatetask.entity.CityEntity" table="CITY" schema="USER7">
+        <id name="cityId">
+            <column name="CITY_ID" sql-type="number" length="22" not-null="true"/>
+        </id>
+        <property name="cityName">
+            <column name="CITY_NAME" sql-type="varchar2" length="4000" not-null="true"/>
+        </property>
+        <many-to-one name="countryByCoutryFk" class="com.epam.hibernatetask.entity.CountryEntity">
+            <column name="COUTRY_FK" not-null="true"/>
+        </many-to-one>
+        <set name="adrsByCityId" inverse="true">
+            <key>
+                <column name="CITY_FK" not-null="true"/>
+            </key>
+            <one-to-many not-found="ignore" class="com.epam.hibernatetask.entity.AdrEntity"/>
+        </set>
+    </class>
+    <class name="com.epam.hibernatetask.entity.CompEntity" table="COMP" schema="USER7">
+        <id name="compId">
+            <column name="COMP_ID" sql-type="number" length="22" not-null="true"/>
+        </id>
+        <property name="compName">
+            <column name="COMP_NAME" sql-type="varchar2" length="4000" not-null="true"/>
+        </property>
+        <set name="officesByCompId" inverse="true">
+            <key>
+                <column name="COMP_ID" not-null="true"/>
+            </key>
+            <one-to-many not-found="ignore" class="com.epam.hibernatetask.entity.OfficeEntity"/>
+        </set>
+    </class>
+    <class name="com.epam.hibernatetask.entity.CountryEntity" table="COUNTRY" schema="USER7">
+        <id name="countryId">
+            <column name="COUNTRY_ID" sql-type="number" length="22" not-null="true"/>
+        </id>
+        <property name="countryName">
+            <column name="COUNTRY_NAME" sql-type="varchar2" length="4000" not-null="true"/>
+        </property>
+        <set name="citiesByCountryId" inverse="true">
+            <key>
+                <column name="COUTRY_FK" not-null="true"/>
+            </key>
+            <one-to-many not-found="ignore" class="com.epam.hibernatetask.entity.CityEntity"/>
+        </set>
+    </class>
+    <class name="com.epam.hibernatetask.entity.EmpEntity" table="EMP" schema="USER7">
+        <id name="empId">
+            <column name="EMP_ID" sql-type="number" length="22" not-null="true"/>
+        </id>
+        <property name="empName">
+            <column name="EMP_NAME" sql-type="varchar2" length="4000" not-null="true"/>
+        </property>
+        <property name="empLastName">
+            <column name="EMP_LAST_NAME" sql-type="varchar2" length="4000" not-null="true"/>
+        </property>
+        <many-to-one name="adrByAdrFk" class="com.epam.hibernatetask.entity.AdrEntity">
+            <column name="ADR_FK" not-null="true"/>
+        </many-to-one>
+        <set name="posesByEmpId" inverse="true">
+            <key>
+                <column name="EMP_ID" not-null="true"/>
+            </key>
+            <one-to-many not-found="ignore" class="com.epam.hibernatetask.entity.PosEntity"/>
+        </set>
+    </class>
+    <class name="com.epam.hibernatetask.entity.OfficeEntity" table="OFFICE" schema="USER7">
+        <id name="officeId">
+            <column name="OFFICE_ID" sql-type="number" length="22" not-null="true"/>
+        </id>
+        <many-to-one name="adrByAdrId" class="com.epam.hibernatetask.entity.AdrEntity">
+            <column name="ADR_ID" not-null="true"/>
+        </many-to-one>
+        <many-to-one name="compByCompId" class="com.epam.hibernatetask.entity.CompEntity">
+            <column name="COMP_ID" not-null="true"/>
+        </many-to-one>
+        <set name="posesByOfficeId" inverse="true">
+            <key>
+                <column name="OFFICE_ID" not-null="true"/>
+            </key>
+            <one-to-many not-found="ignore" class="com.epam.hibernatetask.entity.PosEntity"/>
+        </set>
+    </class>
+    <class name="com.epam.hibernatetask.entity.PosEntity" table="POS" schema="USER7">
+        <composite-id mapped="true" class="com.epam.hibernatetask.entity.PosEntityPK">
+            <key-property name="empId">
+                <column name="EMP_ID" sql-type="number" length="22" not-null="true"/>
+            </key-property>
+            <key-property name="officeId">
+                <column name="OFFICE_ID" sql-type="number" length="22" not-null="true"/>
+            </key-property>
+        </composite-id>
+        <property name="pos">
+            <column name="POS" sql-type="varchar2" length="4000" not-null="true"/>
+        </property>
+        <many-to-one name="empByEmpId" class="com.epam.hibernatetask.entity.EmpEntity">
+            <column name="EMP_ID" not-null="true"/>
+        </many-to-one>
+        <many-to-one name="officeByOfficeId" class="com.epam.hibernatetask.entity.OfficeEntity">
+            <column name="OFFICE_ID" not-null="true"/>
+        </many-to-one>
+    </class>
+    <!-- <query name="getEmployees">
+       <![CDATA[select
+       employees.EMP_NAME,
+         employees.EMP_LAST_NAME,
+         address.ADR_NAME,
+         company.COMP_NAME,
+         city.CITY_NAME,
+         country.COUNTRY_NAME,
+         (select count(*) from pos where pos.office_id=position.office_id),
+         position.POS
+  from
+         (emp employees inner join adr address on employees.ADR_FK=address.ADR_ID
+         left outer join pos position on employees.EMP_ID=position.EMP_ID
+         inner join office on position.OFFICE_ID=office.OFFICE_ID
+         inner join comp company on office.COMP_ID=company.COMP_ID
+         inner join adr addr on office.adr_id=addr.adr_id
+         inner join city on addr.CITY_FK=city.CITY_ID
+         inner join country on city.coutry_fk=country.COUNTRY_ID)
+         ;
+   ]]>
+   select * from (select a.*, rownum rnum from (SQL) a where rownum <= MAX_ROW) where rnum >= MIN_ROW
+    </query> !-->
+
+</hibernate-mapping>
