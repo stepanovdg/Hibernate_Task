@@ -6,11 +6,14 @@
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="Hibernate Task" />
+          <element id="jpa-descriptors" facet="Hibernate Task/jpa/JPA" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Hibernate" />
           <element id="library" level="project" name="Driver" />
           <element id="library" level="application" name="JSTL" />
+          <element id="library" level="project" name="JSTL" />
+          <element id="library" level="project" name="EntityManager" />
         </element>
       </element>
     </root>

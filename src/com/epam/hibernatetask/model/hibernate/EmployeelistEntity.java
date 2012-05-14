@@ -1,4 +1,4 @@
-package com.epam.hibernatetask.model;
+package com.epam.hibernatetask.model.hibernate;
 
 import java.io.Serializable;
 

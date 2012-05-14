@@ -1,11 +1,12 @@
 package com.epam.hibernatetask.logic;
 
-import com.epam.hibernatetask.data.DAO;
+import com.epam.hibernatetask.data.DAOIf;
 import com.epam.hibernatetask.data.HibernateUtil;
-import com.epam.hibernatetask.data.SelectDAO;
-import com.epam.hibernatetask.model.EmployeelistEntity;
-import org.hibernate.SessionFactory;
+import com.epam.hibernatetask.data.JPADAO;
+import com.epam.hibernatetask.model.hibernate.EmployeelistEntity;
+import com.epam.hibernatetask.util.ConfigurationManager;
 
+import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,7 +24,10 @@ import java.util.List;
  */
 
 public class QueryServlet extends HttpServlet {
-    private DAO dao;
+    private static final String EMPLOYEE_LIST_JSP = "EMPLOYEE_LIST_JSP";
+    private static final String ERROR_JSP = "ERROR_JSP";
+    private static final String LIST = "list";
+    private DAOIf dao;
     private List<EmployeelistEntity> list;
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request,response);
@@ -33,8 +37,10 @@ public class QueryServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-       SessionFactory sessionFactory =  HibernateUtil.getSessionFactory();
-        dao = new SelectDAO(sessionFactory);
+      /* SessionFactory sessionFactory =  HibernateUtil.getSessionFactory();
+        dao = new SelectDAO(sessionFactory); */
+        EntityManager entityManager = HibernateUtil.getEntityManagerFactory().createEntityManager();
+        dao = new JPADAO(entityManager);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -44,12 +50,10 @@ public class QueryServlet extends HttpServlet {
         String page;
         try {
             list = dao.getList();
-            request.setAttribute("list", list);
-//            page = ConfigurationManager.getProperty(PARSER_JSP);
-            page = "/view/EmployeeList.jsp";
+            request.setAttribute(LIST, list);
+            page = ConfigurationManager.getProperty(EMPLOYEE_LIST_JSP);
         } catch (SQLException e) {
-          // page = ConfigurationManager.getProperty(ERROR_JSP);
-            page = "/view/error.jsp";
+           page = ConfigurationManager.getProperty(ERROR_JSP);
             e.printStackTrace();
         }
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);

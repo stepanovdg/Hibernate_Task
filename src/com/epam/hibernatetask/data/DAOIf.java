@@ -9,6 +9,6 @@ import java.util.List;
  * Date: 4/26/12
  * Time: 8:06 AM
  */
-public interface DAO  {
+public interface DAOIf {
     List getList() throws SQLException;
 }

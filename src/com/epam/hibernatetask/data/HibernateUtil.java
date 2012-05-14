@@ -1,26 +1,41 @@
 package com.epam.hibernatetask.data;
 
+import com.epam.hibernatetask.util.ConfigurationManager;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
-public class HibernateUtil {
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
-    private static SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
-    private static ServiceRegistry serviceRegistry;
+public final class HibernateUtil {
+
+    private static SessionFactory sessionFactory ;//= HibernateUtil.buildSessionFactory();
+    private static EntityManagerFactory entityManagerFactory = buildManagerFactory();
+    private static final String HIBERNATE_CFG = "HIBERNATE_CFG";
 
     private static SessionFactory buildSessionFactory() {
         try {
             // Create the SessionFactory from hibernate.cfg.xml
             Configuration configuration = new Configuration();
-            configuration.configure("/hibernate.cfg.xml");
-            serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
-            sessionFactory = new Configuration().configure("/hibernate.cfg.xml").buildSessionFactory(serviceRegistry);
+            configuration.configure(ConfigurationManager.getProperty(HIBERNATE_CFG));
+            ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties())
+                    .buildServiceRegistry();
+            sessionFactory = new Configuration().configure(ConfigurationManager.getProperty(HIBERNATE_CFG))
+                    .buildSessionFactory(serviceRegistry);
             return sessionFactory;
         } catch (Throwable ex) {
-            // Make sure you log the exception, as it might be swallowed
             System.err.println("Initial SessionFactory creation failed." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
+    private static EntityManagerFactory buildManagerFactory() {
+
+        try {
+             return Persistence.createEntityManagerFactory("persistenceUnit");
+        } catch (Throwable ex) {
+            System.err.println("Initial EntityManagerFactory creation failed." + ex);
             throw new ExceptionInInitializerError(ex);
         }
     }
@@ -28,4 +43,8 @@ public class HibernateUtil {
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
+    public static EntityManagerFactory getEntityManagerFactory() {
+        return entityManagerFactory;
+    }
+
 }

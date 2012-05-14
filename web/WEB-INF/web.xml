@@ -34,4 +34,8 @@
             <taglib-location>/WEB-INF/tld/x.tld</taglib-location>
         </taglib>
     </jsp-config>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/view/error.jsp</location>
+    </error-page>
 </web-app>

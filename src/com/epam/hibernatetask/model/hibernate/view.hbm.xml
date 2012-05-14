@@ -4,7 +4,7 @@
   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="com.epam.hibernatetask.model.EmployeelistEntity" table="EMPLOYEELIST" schema="USER7">
+    <class name="com.epam.hibernatetask.model.hibernate.EmployeelistEntity" table="EMPLOYEELIST" schema="USER7">
         <cache usage="read-only"/>
         <id name="id"/>
         <property name="empName">
@@ -33,6 +33,6 @@
         </property>
     </class>
     <query name="getEmployees">
-      <![CDATA[from  EmployeelistEntity  where rownum <= :MAX_ROW and rownum >= :MIN_ROW]]>
+        <![CDATA[from  EmployeelistEntity  where rownum <= :MAX_ROW and rownum >= :MIN_ROW]]>
     </query>
 </hibernate-mapping>

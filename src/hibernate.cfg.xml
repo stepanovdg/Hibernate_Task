@@ -3,7 +3,7 @@
         "-//Hibernate/Hibernate Configuration DTD//EN"
         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <session-factory >
+    <session-factory>
         <property name="connection.url">jdbc:oracle:thin:user7/user7@127.0.0.1:1521</property>
         <property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
         <property name="connection.username">user7</property>
@@ -12,13 +12,8 @@
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">update</property>
         <property name="cache.use_second_level_cache">false</property>
-       <property name="hibernate.current_session_context_class">thread</property>
-       <!--<property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>-->
-        <mapping resource="com/epam/hibernatetask/entity/hibernate.hbm.xml"/>
-        <mapping resource="com/epam/hibernatetask/model/view.hbm.xml"/>
-        <!-- DB schema will be updated if needed -->
-        <!-- <property name="hbm2ddl.auto">update</property> -->
+        <property name="hibernate.current_session_context_class">thread</property>
+        <mapping resource="com/epam/hibernatetask/entity/hibernate/hibernate.hbm.xml"/>
+        <mapping resource="com/epam/hibernatetask/model/hibernate/view.hbm.xml"/>
     </session-factory>
-        <!--<property name="hibernate.connection.driver_class"> org.hsqldb.jdbcDriver</property>-->
-        <!--<property name="connection.pool_size">1</property>-->
 </hibernate-configuration>
